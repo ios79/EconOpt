@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EconOpt - Cost & Profit Simulator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4">📊 EconOpt - Cost & Profit Optimization</h2>
+
+    <form method="post">
+        <div class="mb-3">
+            <label for="cost_data" class="form-label">Cost Data (Quantity, Cost):</label>
+            <textarea class="form-control" id="cost_data" name="cost_data" rows="4">{{ cost_data or "100, 3000\n200, 6000\n300, 11000" }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="revenue_data" class="form-label">Revenue Data (Quantity, Price):</label>
+            <textarea class="form-control" id="revenue_data" name="revenue_data" rows="4">{{ revenue_data or "100, 75\n200, 72\n300, 65" }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Quantity Range:</label>
+            <div class="row">
+                <div class="col">
+                    <input type="number" class="form-control" name="qmin" value="{{ qmin or 50 }}" placeholder="Min Quantity">
+                </div>
+                <div class="col">
+                    <input type="number" class="form-control" name="qmax" value="{{ qmax or 700 }}" placeholder="Max Quantity">
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Run Optimization</button>
+    </form>
+
+    {% if plot_url %}
+    <div class="mt-5">
+        <h4>📈 Results</h4>
+        <img src="data:image/png;base64,{{ plot_url }}" alt="Plot" class="img-fluid" style="border: 1px solid #ccc; padding: 10px;" />
+    </div>
+    {% endif %}
+
+    {% if max_profit is defined %}
+    <div class="mt-4">
+        <h5>📃 Summary</h5>
+        <ul class="list-group">
+            <li class="list-group-item">Max Profit: <strong>${{ max_profit }}</strong> at Quantity <strong>{{ Q_max_profit }}</strong></li>
+            {% for q, p in break_even_points %}
+                <li class="list-group-item">Break-even at Quantity <strong>{{ q }}</strong> with Price <strong>${{ p }}</strong></li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</div>
+</body>
+</html>
+
